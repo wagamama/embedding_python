@@ -7,7 +7,7 @@ static char* PY_FUNCTION_NAME = "multiply";
 int main(int argc, char* argv[])
 {
     int a, b;
-    PyObject *pModule, *pFunc, *pArgs, *pValue;
+    PyObject *pModule = NULL, *pFunc = NULL, *pArgs = NULL, *pValue = NULL;
 
     Py_Initialize();
     PyObject* sysPath = PySys_GetObject((char*) "path");
@@ -16,16 +16,27 @@ int main(int argc, char* argv[])
     printf("Input two integers separated by space:\n");
     scanf("%d %d", &a, &b);
 
-    pModule = PyImport_ImportModule(PY_MODULE_NAME);
-    pFunc = PyObject_GetAttrString(pModule, PY_FUNCTION_NAME);
-    pArgs = Py_BuildValue("ii", a, b);
-    pValue = PyObject_Call(pFunc, pArgs, NULL);
-    printf("Result of call: %ld\n", PyInt_AsLong(pValue));
+    do
+    {
+        pModule = PyImport_ImportModule(PY_MODULE_NAME);
+        if (pModule == NULL) break;
 
-    Py_DECREF(pValue);
-    Py_DECREF(pArgs);
-    Py_DECREF(pFunc);
-    Py_DECREF(pModule);
+        pFunc = PyObject_GetAttrString(pModule, PY_FUNCTION_NAME);
+        if (pFunc == NULL) break;
+
+        pArgs = Py_BuildValue("ii", a, b);
+        if (pArgs == NULL) break;
+
+        pValue = PyObject_Call(pFunc, pArgs, NULL);
+        if (pValue == NULL) break;
+        printf("Result of call: %ld\n", PyInt_AsLong(pValue));
+        break;
+    } while (1);
+
+    Py_XDECREF(pValue);
+    Py_XDECREF(pArgs);
+    Py_XDECREF(pFunc);
+    Py_XDECREF(pModule);
 
     Py_Finalize();
     return 0;
