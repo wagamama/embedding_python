@@ -1,7 +1,7 @@
 #include <Python.h>
 #include <stdio.h>
 
-static char* PY_MODULE_NAME = "multiply";
+static char* PY_MODULE_NAME = "tutorial-2";
 static char* PY_FUNCTION_NAME = "multiply";
 
 int main(int argc, char* argv[])
