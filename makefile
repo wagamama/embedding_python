@@ -1,12 +1,12 @@
-CC = g++
-EXECUTABLES = $(patsubst %.cpp, %, $(wildcard *.cpp))
+CC = gcc
+EXECUTABLES = $(patsubst %.c, %, $(wildcard *.c))
 
 .PHONY: clean
 
 all: $(EXECUTABLES)
 	@echo Compile tutorials for embedding python
 
-%: %.cpp
+%: %.c
 	@$(CC) `python-config --cflags` $< -o $@ `python-config --ldflags`
 
 clean:
