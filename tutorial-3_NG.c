@@ -16,8 +16,6 @@ int main(int argc, char* argv[])
     PyObject* sysPath = PySys_GetObject((char*) "path");
     PyList_Append(sysPath, PyString_FromString("."));
 
-    PyThreadState* save = PyEval_SaveThread();
-
     do
     {
         state = PyGILState_Ensure();
@@ -50,8 +48,6 @@ int main(int argc, char* argv[])
         printf("finish\n");
         break;
     } while (1);
-
-    PyEval_RestoreThread(save);
 
     Py_XDECREF(pInst);
     Py_XDECREF(pClass);
