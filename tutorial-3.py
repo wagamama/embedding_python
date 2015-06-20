@@ -1,10 +1,6 @@
 import threading
 import time
 
-def working(name):
-    print name, "is working"
-    time.sleep(1)
-
 class WorkerThread(threading.Thread):
     def __init__(self, name):
         super(WorkerThread, self).__init__(name=name)
@@ -12,7 +8,8 @@ class WorkerThread(threading.Thread):
 
     def run(self):
         while not self.stop_event.is_set():
-            working(self.name)
+            print self.name, "is working"
+            time.sleep(1)
 
     def stop(self):
         self.stop_event.set()
