@@ -35,6 +35,8 @@ void* run_python_function(void* arg)
 
     PyGILState_Release(state);
 
+    pthread_exit(NULL);
+
     return NULL;
 }
 
@@ -60,8 +62,6 @@ int main(int argc, char* argv[])
     }
 
     stop_event = 1;
-    pthread_cancel(tid1);
-    pthread_cancel(tid2);
     pthread_join(tid1, NULL);
     pthread_join(tid2, NULL);
 
@@ -69,6 +69,8 @@ int main(int argc, char* argv[])
 
     PyEval_RestoreThread(save);
     Py_Finalize();
+
+    pthread_exit(NULL);
 
     return 0;
 }
