@@ -30,8 +30,7 @@ int main(int argc, char* argv[])
         pValue = PyObject_Call(pFunc, pArgs, NULL);
         if (pValue == NULL) break;
         printf("Result of call: %ld\n", PyInt_AsLong(pValue));
-        break;
-    } while (1);
+    } while (0);
 
     Py_XDECREF(pValue);
     Py_XDECREF(pArgs);

@@ -45,8 +45,7 @@ int main(int argc, char* argv[])
         if (pArgs == NULL) break;
 
         PyObject_Call(pFunc, pArgs, NULL);
-        break;
-    } while (1);
+    } while (0);
 
     Py_XDECREF(pArgs);
     Py_XDECREF(pFunc);

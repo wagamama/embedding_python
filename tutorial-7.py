@@ -1,6 +1,7 @@
 import threading
 import time
 
+
 class WorkerThread(threading.Thread):
     def __init__(self, name, callback):
         super(WorkerThread, self).__init__(name=name)
@@ -14,6 +15,7 @@ class WorkerThread(threading.Thread):
 
     def stop(self):
         self.stop_event.set()
+
 
 class ThreadManager(object):
     def __init__(self, callback):
@@ -29,6 +31,7 @@ class ThreadManager(object):
         self.worker2.stop()
         self.worker1.join()
         self.worker2.join()
+
 
 def main():
     def callback(name):

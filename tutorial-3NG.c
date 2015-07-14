@@ -46,8 +46,7 @@ int main(int argc, char* argv[])
         PyGILState_Release(state);
 
         printf("finish\n");
-        break;
-    } while (1);
+    } while (0);
 
     Py_XDECREF(pInst);
     Py_XDECREF(pClass);

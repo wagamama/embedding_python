@@ -24,9 +24,7 @@ void* run_python_function(void* arg)
         {
             PyObject_CallFunction(pFunc, "s", name);
         }
-
-        break;
-    } while (1);
+    } while (0);
 
     Py_XDECREF(pFunc);
     Py_XDECREF(pModule);

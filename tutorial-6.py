@@ -5,6 +5,7 @@ def multiply(a, b, callback):
         c = c + b
     callback(c)
 
+
 def main():
     def callback(c):
         print "result:", c

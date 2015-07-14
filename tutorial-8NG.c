@@ -80,8 +80,7 @@ int main(int argc, char* argv[])
         PyGILState_Release(state);
 
         printf("finish\n");
-        break;
-    } while (1);
+    } while (0);
 
     PyEval_RestoreThread(save);
 
