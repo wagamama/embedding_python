@@ -1,16 +1,45 @@
 #include <Python.h>
 #include <stdio.h>
+#include <pthread.h>
 
 static char* PY_MODULE_NAME = "tutorial-4";
-static char* PY_THREAD_MANAGER_CLASS = "ThreadManager";
-static char* PY_START_THREAD_FUNCTION = "start_thread";
-static char* PY_STOP_THREAD_FUNCTION = "stop_thread";
+static char* PY_WORKING_FUNCTION = "working";
+
+int stop_event = 0;
+
+void* run_python_function(void* arg)
+{
+    PyGILState_STATE state = PyGILState_Ensure();
+
+    char* name = *((char**) arg);
+    PyObject *pModule = NULL, *pFunc = NULL;
+
+    do
+    {
+        pModule = PyImport_ImportModule(PY_MODULE_NAME);
+        if (pModule == NULL) break;
+
+        pFunc = PyObject_GetAttrString(pModule, PY_WORKING_FUNCTION);
+        if (pFunc == NULL) break;
+
+        while (!stop_event)
+        {
+            PyObject_CallFunction(pFunc, "s", name);
+        }
+    } while (0);
+
+    Py_XDECREF(pFunc);
+    Py_XDECREF(pModule);
+
+    PyGILState_Release(state);
+
+    pthread_exit(NULL);
+
+    return NULL;
+}
 
 int main(int argc, char* argv[])
 {
-    PyObject *pModule = NULL, *pClass = NULL, *pInst = NULL;
-    PyGILState_STATE state;
-
     PyEval_InitThreads();
     Py_Initialize();
     PyObject* sysPath = PySys_GetObject((char*) "path");
@@ -18,44 +47,28 @@ int main(int argc, char* argv[])
 
     PyThreadState* save = PyEval_SaveThread();
 
-    do
+    pthread_t tid1, tid2;
+    char* tname1 = "worker1";
+    char* tname2 = "worker2";
+    pthread_create(&tid1, NULL, &run_python_function, &tname1);
+    pthread_create(&tid2, NULL, &run_python_function, &tname2);
+
+    for (int i = 0; i < 5; i++)
     {
-        state = PyGILState_Ensure();
-        {
-            pModule = PyImport_ImportModule(PY_MODULE_NAME);
-            if (pModule == NULL) break;
+        printf("main thread is running\n");
+        sleep(1);
+    }
 
-            pClass = PyObject_GetAttrString(pModule, PY_THREAD_MANAGER_CLASS);
-            if (pClass == NULL) break;
+    stop_event = 1;
+    pthread_join(tid1, NULL);
+    pthread_join(tid2, NULL);
 
-            pInst = PyObject_CallObject(pClass, NULL);
-            if (pInst == NULL) break;
-
-            PyObject_CallMethod(pInst, PY_START_THREAD_FUNCTION, NULL);
-        }
-        PyGILState_Release(state);
-
-        for (int i = 0; i < 5; i++)
-        {
-            printf("main thread is running\n");
-            sleep(1);
-        }
-
-        state = PyGILState_Ensure();
-        {
-            PyObject_CallMethod(pInst, PY_STOP_THREAD_FUNCTION, NULL);
-        }
-        PyGILState_Release(state);
-
-        printf("finish\n");
-    } while (0);
+    printf("finish\n");
 
     PyEval_RestoreThread(save);
-
-    Py_XDECREF(pInst);
-    Py_XDECREF(pClass);
-    Py_XDECREF(pModule);
-
     Py_Finalize();
+
+    pthread_exit(NULL);
+
     return 0;
 }

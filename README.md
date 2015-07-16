@@ -7,9 +7,9 @@
 ### tutorial-2
 	Pure embedding by manipulating Python objects
 ### tutorial-3
-	Multi-thread in C layer
-### tutorial-4
 	Multi-thread in Python layer
+### tutorial-4
+	Multi-thread in C layer
 ### tutorial-5
 	C function callbacks in Python by new module
 ### tutorial-6
