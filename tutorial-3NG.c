@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <pthread.h>
 
-static char* PY_MODULE_NAME = "tutorial-4";
+static char* PY_MODULE_NAME = "tutorial-3";
 static char* PY_WORKING_FUNCTION = "working";
 
 int stop_event = 0;

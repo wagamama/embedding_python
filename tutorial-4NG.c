@@ -1,7 +1,7 @@
 #include <Python.h>
 #include <stdio.h>
 
-static char* PY_MODULE_NAME = "tutorial-3";
+static char* PY_MODULE_NAME = "tutorial-4";
 static char* PY_THREAD_MANAGER_CLASS = "ThreadManager";
 static char* PY_START_THREAD_FUNCTION = "start_thread";
 static char* PY_STOP_THREAD_FUNCTION = "stop_thread";
