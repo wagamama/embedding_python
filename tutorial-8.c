@@ -23,6 +23,8 @@ static PyObject* callback2(PyObject* self, PyObject* args)
     }
     PyEval_RestoreThread(save);
 
+    printf("%s end heavy computing\n", str);
+
     Py_RETURN_NONE;
 }
 

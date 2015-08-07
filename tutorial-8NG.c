@@ -17,6 +17,7 @@ static PyObject* callback2(PyObject* self, PyObject* args)
     PyArg_ParseTuple(args, "s", &str);
     printf("%s start heavy computing\n", str);
     sleep(5);
+    printf("%s end heavy computing\n", str);
 
     Py_RETURN_NONE;
 }
