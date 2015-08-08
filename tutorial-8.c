@@ -15,7 +15,7 @@ static PyObject* callback2(PyObject* self, PyObject* args)
 {
     char* str;
     PyArg_ParseTuple(args, "s", &str);
-    printf("%s start heavy computing\n", str);
+    printf("%s blocking start\n", str);
 
     PyThreadState* save = PyEval_SaveThread();
     {
@@ -23,7 +23,7 @@ static PyObject* callback2(PyObject* self, PyObject* args)
     }
     PyEval_RestoreThread(save);
 
-    printf("%s end heavy computing\n", str);
+    printf("%s blocking end\n", str);
 
     Py_RETURN_NONE;
 }
