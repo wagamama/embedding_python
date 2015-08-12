@@ -11,7 +11,7 @@ void* run_python_function(void* arg)
     PyObject *pModule = NULL, *pFunc = NULL;
     do
     {
-        pModule = PyImport_ImportModule("tutorial-4");
+        pModule = PyImport_ImportModule("work");
         if (pModule == NULL) break;
 
         pFunc = PyObject_GetAttrString(pModule, "working");

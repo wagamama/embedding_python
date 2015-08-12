@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
     PyObject *pModule = NULL, *pFunc = NULL, *pArgs = NULL, *pValue = NULL;
     do
     {
-        pModule = PyImport_ImportModule("tutorial-2");
+        pModule = PyImport_ImportModule("func");
         if (pModule == NULL) break;
 
         pFunc = PyObject_GetAttrString(pModule, "multiply");

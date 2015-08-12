@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
             pCallbackFunc = PyCFunction_New(&CFunc, NULL);
             if (pCallbackFunc == NULL) break;
 
-            pModule = PyImport_ImportModule("tutorial-7");
+            pModule = PyImport_ImportModule("worker-callback");
             if (pModule == NULL) break;
 
             pClass = PyObject_GetAttrString(pModule, "ThreadManager");

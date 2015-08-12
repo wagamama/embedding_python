@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
     {
         PyGILState_STATE state = PyGILState_Ensure();
         {
-            pModule = PyImport_ImportModule("tutorial-3");
+            pModule = PyImport_ImportModule("worker");
             if (pModule == NULL) break;
 
             pClass = PyObject_GetAttrString(pModule, "ThreadManager");

@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
         };
         Py_InitModule("cmodule", CFunctions);
 
-        pModule = PyImport_ImportModule("tutorial-5");
+        pModule = PyImport_ImportModule("func-module");
         if (pModule == NULL) break;
 
         pFunc = PyObject_GetAttrString(pModule, "multiply");

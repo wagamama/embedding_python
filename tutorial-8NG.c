@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
             pCallback2Func = PyCFunction_New(&CFunc2, NULL);
             if (pCallback2Func == NULL) break;
 
-            pModule = PyImport_ImportModule("tutorial-8");
+            pModule = PyImport_ImportModule("worker-callback");
             if (pModule == NULL) break;
 
             pClass = PyObject_GetAttrString(pModule, "ThreadManager");
