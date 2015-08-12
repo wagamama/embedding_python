@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
         pCallbackFunc = PyCFunction_New(&CFunc, NULL);
         if (pCallbackFunc == NULL) break;
 
-        pModule = PyImport_ImportModule("func");
+        pModule = PyImport_ImportModule("func-callback");
         if (pModule == NULL) break;
 
         pFunc = PyObject_GetAttrString(pModule, "multiply");
