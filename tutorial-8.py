@@ -31,21 +31,3 @@ class ThreadManager(object):
         self.worker2.stop()
         self.worker1.join()
         self.worker2.join()
-
-
-def main():
-    def callback1(name):
-        print name, "is working"
-
-    def callback2(name):
-        print name, "start heavy computing"
-        time.sleep(5)
-        print name, "end heavy computing"
-
-    tm = ThreadManager(callback1, callback2)
-    tm.start_thread()
-    time.sleep(5)
-    tm.stop_thread()
-
-if __name__ == '__main__':
-    main()

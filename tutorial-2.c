@@ -1,27 +1,23 @@
 #include <Python.h>
 #include <stdio.h>
 
-static char* PY_MODULE_NAME = "tutorial-2";
-static char* PY_FUNCTION_NAME = "multiply";
-
 int main(int argc, char* argv[])
 {
-    int a, b;
-    PyObject *pModule = NULL, *pFunc = NULL, *pArgs = NULL, *pValue = NULL;
-
     Py_Initialize();
     PyObject* sysPath = PySys_GetObject((char*) "path");
     PyList_Append(sysPath, PyString_FromString("."));
 
     printf("Input two integers separated by space:\n");
+    int a, b;
     scanf("%d %d", &a, &b);
 
+    PyObject *pModule = NULL, *pFunc = NULL, *pArgs = NULL, *pValue = NULL;
     do
     {
-        pModule = PyImport_ImportModule(PY_MODULE_NAME);
+        pModule = PyImport_ImportModule("tutorial-2");
         if (pModule == NULL) break;
 
-        pFunc = PyObject_GetAttrString(pModule, PY_FUNCTION_NAME);
+        pFunc = PyObject_GetAttrString(pModule, "multiply");
         if (pFunc == NULL) break;
 
         pArgs = Py_BuildValue("ii", a, b);

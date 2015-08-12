@@ -2,26 +2,22 @@
 #include <stdio.h>
 #include <pthread.h>
 
-static char* PY_MODULE_NAME = "tutorial-4";
-static char* PY_WORKING_FUNCTION = "working";
-
 int stop_event = 0;
 
 void* run_python_function(void* arg)
 {
     PyGILState_STATE state = PyGILState_Ensure();
 
-    char* name = *((char**) arg);
     PyObject *pModule = NULL, *pFunc = NULL;
-
     do
     {
-        pModule = PyImport_ImportModule(PY_MODULE_NAME);
+        pModule = PyImport_ImportModule("tutorial-4");
         if (pModule == NULL) break;
 
-        pFunc = PyObject_GetAttrString(pModule, PY_WORKING_FUNCTION);
+        pFunc = PyObject_GetAttrString(pModule, "working");
         if (pFunc == NULL) break;
 
+        char* name = *((char**) arg);
         while (!stop_event)
         {
             PyObject_CallFunction(pFunc, "s", name);

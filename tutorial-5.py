@@ -7,10 +7,3 @@ def multiply(a, b):
     for i in range(0, a):
         c = c + b
     cmodule.callback(c)
-
-
-def main():
-    multiply(3, 5)
-
-if __name__ == '__main__':
-    main()

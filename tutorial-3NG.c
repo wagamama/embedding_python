@@ -1,35 +1,28 @@
 #include <Python.h>
 #include <stdio.h>
 
-static char* PY_MODULE_NAME = "tutorial-3";
-static char* PY_THREAD_MANAGER_CLASS = "ThreadManager";
-static char* PY_START_THREAD_FUNCTION = "start_thread";
-static char* PY_STOP_THREAD_FUNCTION = "stop_thread";
-
 int main(int argc, char* argv[])
 {
-    PyObject *pModule = NULL, *pClass = NULL, *pInst = NULL;
-    PyGILState_STATE state;
-
     PyEval_InitThreads();
     Py_Initialize();
     PyObject* sysPath = PySys_GetObject((char*) "path");
     PyList_Append(sysPath, PyString_FromString("."));
 
+    PyObject *pModule = NULL, *pClass = NULL, *pInst = NULL;
     do
     {
-        state = PyGILState_Ensure();
+        PyGILState_STATE state = PyGILState_Ensure();
         {
-            pModule = PyImport_ImportModule(PY_MODULE_NAME);
+            pModule = PyImport_ImportModule("tutorial-3");
             if (pModule == NULL) break;
 
-            pClass = PyObject_GetAttrString(pModule, PY_THREAD_MANAGER_CLASS);
+            pClass = PyObject_GetAttrString(pModule, "ThreadManager");
             if (pClass == NULL) break;
 
             pInst = PyObject_CallObject(pClass, NULL);
             if (pInst == NULL) break;
 
-            PyObject_CallMethod(pInst, PY_START_THREAD_FUNCTION, NULL);
+            PyObject_CallMethod(pInst, "start_thread", NULL);
         }
         PyGILState_Release(state);
 
@@ -41,7 +34,7 @@ int main(int argc, char* argv[])
 
         state = PyGILState_Ensure();
         {
-            PyObject_CallMethod(pInst, PY_STOP_THREAD_FUNCTION, NULL);
+            PyObject_CallMethod(pInst, "stop_thread", NULL);
         }
         PyGILState_Release(state);
 

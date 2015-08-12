@@ -1,8 +1,6 @@
 #include <Python.h>
 #include <stdio.h>
 
-static char* FUNCTION1_NAME = "callback1";
-static char* FUNCTION2_NAME = "callback2";
 static PyObject* callback1(PyObject* self, PyObject* args)
 {
     char* str;
@@ -22,17 +20,8 @@ static PyObject* callback2(PyObject* self, PyObject* args)
     Py_RETURN_NONE;
 }
 
-static char* PY_MODULE_NAME = "tutorial-8";
-static char* PY_THREAD_MANAGER_CLASS = "ThreadManager";
-static char* PY_START_THREAD_FUNCTION = "start_thread";
-static char* PY_STOP_THREAD_FUNCTION = "stop_thread";
-
 int main(int argc, char* argv[])
 {
-    PyObject *pCallback1Func = NULL, *pCallback2Func = NULL;
-    PyObject *pModule = NULL, *pClass = NULL, *pInst = NULL, *pArgs = NULL;
-    PyGILState_STATE state;
-
     PyEval_InitThreads();
     Py_Initialize();
     PyObject* sysPath = PySys_GetObject((char*) "path");
@@ -40,22 +29,24 @@ int main(int argc, char* argv[])
 
     PyThreadState* save = PyEval_SaveThread();
 
+    PyObject *pCallback1Func = NULL, *pCallback2Func = NULL;
+    PyObject *pModule = NULL, *pClass = NULL, *pInst = NULL, *pArgs = NULL;
     do
     {
-        state = PyGILState_Ensure();
+        PyGILState_STATE state = PyGILState_Ensure();
         {
-            PyMethodDef CFunc1 = {FUNCTION1_NAME, callback1, METH_VARARGS, ""};
+            PyMethodDef CFunc1 = {"callback1", callback1, METH_VARARGS, ""};
             pCallback1Func = PyCFunction_New(&CFunc1, NULL);
             if (pCallback1Func == NULL) break;
 
-            PyMethodDef CFunc2 = {FUNCTION2_NAME, callback2, METH_VARARGS, ""};
+            PyMethodDef CFunc2 = {"callback2", callback2, METH_VARARGS, ""};
             pCallback2Func = PyCFunction_New(&CFunc2, NULL);
             if (pCallback2Func == NULL) break;
 
-            pModule = PyImport_ImportModule(PY_MODULE_NAME);
+            pModule = PyImport_ImportModule("tutorial-8");
             if (pModule == NULL) break;
 
-            pClass = PyObject_GetAttrString(pModule, PY_THREAD_MANAGER_CLASS);
+            pClass = PyObject_GetAttrString(pModule, "ThreadManager");
             if (pClass == NULL) break;
 
             pArgs = Py_BuildValue("(OO)", pCallback1Func, pCallback2Func);
@@ -64,7 +55,7 @@ int main(int argc, char* argv[])
             pInst = PyObject_Call(pClass, pArgs, NULL);
             if (pInst == NULL) break;
 
-            PyObject_CallMethod(pInst, PY_START_THREAD_FUNCTION, NULL);
+            PyObject_CallMethod(pInst, "start_thread", NULL);
         }
         PyGILState_Release(state);
 
@@ -76,7 +67,7 @@ int main(int argc, char* argv[])
 
         state = PyGILState_Ensure();
         {
-            PyObject_CallMethod(pInst, PY_STOP_THREAD_FUNCTION, NULL);
+            PyObject_CallMethod(pInst, "stop_thread", NULL);
         }
         PyGILState_Release(state);
 

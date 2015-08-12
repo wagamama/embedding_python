@@ -26,14 +26,3 @@ class ThreadManager(object):
 
     def stop_thread(self):
         self.worker.stop()
-        self.worker.join()
-
-
-def main():
-    tm = ThreadManager()
-    tm.start_thread()
-    time.sleep(5)
-    tm.stop_thread()
-
-if __name__ == '__main__':
-    main()

@@ -18,9 +18,9 @@ class WorkerThread(threading.Thread):
 
 
 class ThreadManager(object):
-    def __init__(self, callback):
-        self.worker1 = WorkerThread("worker1", callback)
-        self.worker2 = WorkerThread("worker2", callback)
+    def __init__(self, callback1, callback2):
+        self.worker1 = WorkerThread("worker1", callback1)
+        self.worker2 = WorkerThread("worker2", callback2)
 
     def start_thread(self):
         self.worker1.start()
@@ -31,16 +31,3 @@ class ThreadManager(object):
         self.worker2.stop()
         self.worker1.join()
         self.worker2.join()
-
-
-def main():
-    def callback(name):
-        print name, "is working"
-
-    tm = ThreadManager(callback)
-    tm.start_thread()
-    time.sleep(5)
-    tm.stop_thread()
-
-if __name__ == '__main__':
-    main()

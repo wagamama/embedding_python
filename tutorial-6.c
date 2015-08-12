@@ -1,7 +1,6 @@
 #include <Python.h>
 #include <stdio.h>
 
-static char* FUNCTION_NAME = "callback";
 static PyObject* callback(PyObject* self, PyObject* args)
 {
     long c;
@@ -11,31 +10,27 @@ static PyObject* callback(PyObject* self, PyObject* args)
     Py_RETURN_NONE;
 }
 
-static char* PY_MODULE_NAME = "tutorial-6";
-static char* PY_FUNCTION_NAME = "multiply";
-
 int main(int argc, char* argv[])
 {
-    int a, b;
-    PyObject *pCallbackFunc = NULL, *pModule = NULL, *pFunc = NULL, *pArgs = NULL;
-
     Py_Initialize();
     PyObject* sysPath = PySys_GetObject((char*) "path");
     PyList_Append(sysPath, PyString_FromString("."));
 
     printf("Input two integers separated by space:\n");
+    int a, b;
     scanf("%d %d", &a, &b);
 
+    PyObject *pCallbackFunc = NULL, *pModule = NULL, *pFunc = NULL, *pArgs = NULL;
     do
     {
-        PyMethodDef CFunc = {FUNCTION_NAME, callback, METH_VARARGS, ""};
+        PyMethodDef CFunc = {"callback", callback, METH_VARARGS, ""};
         pCallbackFunc = PyCFunction_New(&CFunc, NULL);
         if (pCallbackFunc == NULL) break;
 
-        pModule = PyImport_ImportModule(PY_MODULE_NAME);
+        pModule = PyImport_ImportModule("tutorial-6");
         if (pModule == NULL) break;
 
-        pFunc = PyObject_GetAttrString(pModule, PY_FUNCTION_NAME);
+        pFunc = PyObject_GetAttrString(pModule, "multiply");
         if (pFunc == NULL) break;
 
         pArgs = Py_BuildValue("iiO", a, b, pCallbackFunc);

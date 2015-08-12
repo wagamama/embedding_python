@@ -1,7 +1,6 @@
 #include <Python.h>
 #include <stdio.h>
 
-static char* FUNCTION_NAME = "callback";
 static PyObject* callback(PyObject* self, PyObject* args)
 {
     char* str;
@@ -11,16 +10,8 @@ static PyObject* callback(PyObject* self, PyObject* args)
     Py_RETURN_NONE;
 }
 
-static char* PY_MODULE_NAME = "tutorial-7";
-static char* PY_THREAD_MANAGER_CLASS = "ThreadManager";
-static char* PY_START_THREAD_FUNCTION = "start_thread";
-static char* PY_STOP_THREAD_FUNCTION = "stop_thread";
-
 int main(int argc, char* argv[])
 {
-    PyObject *pCallbackFunc = NULL, *pModule = NULL, *pClass = NULL, *pInst = NULL, *pArgs = NULL;
-    PyGILState_STATE state;
-
     PyEval_InitThreads();
     Py_Initialize();
     PyObject* sysPath = PySys_GetObject((char*) "path");
@@ -28,27 +19,28 @@ int main(int argc, char* argv[])
 
     PyThreadState* save = PyEval_SaveThread();
 
+    PyObject *pCallbackFunc = NULL, *pModule = NULL, *pClass = NULL, *pInst = NULL, *pArgs = NULL;
     do
     {
-        state = PyGILState_Ensure();
+        PyGILState_STATE state = PyGILState_Ensure();
         {
-            PyMethodDef CFunc = {FUNCTION_NAME, callback, METH_VARARGS, ""};
+            PyMethodDef CFunc = {"callback", callback, METH_VARARGS, ""};
             pCallbackFunc = PyCFunction_New(&CFunc, NULL);
             if (pCallbackFunc == NULL) break;
 
-            pModule = PyImport_ImportModule(PY_MODULE_NAME);
+            pModule = PyImport_ImportModule("tutorial-7");
             if (pModule == NULL) break;
 
-            pClass = PyObject_GetAttrString(pModule, PY_THREAD_MANAGER_CLASS);
+            pClass = PyObject_GetAttrString(pModule, "ThreadManager");
             if (pClass == NULL) break;
 
-            pArgs = Py_BuildValue("(O)", pCallbackFunc);
+            pArgs = Py_BuildValue("(OO)", pCallbackFunc, pCallbackFunc);
             if (pArgs == NULL) break;
 
             pInst = PyObject_Call(pClass, pArgs, NULL);
             if (pInst == NULL) break;
 
-            PyObject_CallMethod(pInst, PY_START_THREAD_FUNCTION, NULL);
+            PyObject_CallMethod(pInst, "start_thread", NULL);
         }
         PyGILState_Release(state);
 
@@ -60,7 +52,7 @@ int main(int argc, char* argv[])
 
         state = PyGILState_Ensure();
         {
-            PyObject_CallMethod(pInst, PY_STOP_THREAD_FUNCTION, NULL);
+            PyObject_CallMethod(pInst, "stop_thread", NULL);
         }
         PyGILState_Release(state);
 
