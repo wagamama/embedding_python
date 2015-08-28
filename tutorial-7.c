@@ -5,7 +5,7 @@ static PyObject* callback(PyObject* self, PyObject* args)
 {
     char* str;
     PyArg_ParseTuple(args, "s", &str);
-    printf("%s push event\n", str);
+    printf("receive event from %s\n", str);
 
     Py_RETURN_NONE;
 }
